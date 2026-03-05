@@ -86,7 +86,4 @@ All data is stored in text files so it persists between runs.
 * Using **STL containers efficiently**
 * Implementing **simple database persistence with files**
 * Designing **modular C++ structures**
-* Managing relationships between objects
-* ⭐ **أفضل description للريبو ليجلب recruiters**
-
-وغالبًا هذه الأشياء تفرق كثير عندما يراها شخص في GitHub.
+* Managing relationships between objects.
