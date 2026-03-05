@@ -1,12 +1,10 @@
 #include <iostream>
 #include <vector>
-#include <ctime>
 #include <fstream>
 #include <map>
 using namespace std;
 
 // Asistant Functions
-
 enum enAgreement
 {
     YES = 1,
@@ -88,7 +86,7 @@ struct stQues
     string ques;
     string answer;
 
-    enAgreement isAnonymosQues;
+    enAgreement isAnonymousQues;
 
     string ThreadParentQuesId;
 
@@ -134,18 +132,18 @@ struct stQues
         getline(cin, answer);
     }
 
-    void isAnonymusQues()
+    void fillIsAnonymousQues()
     {
         string answer;
         do
         {
-            answer = readTxt("Do you want to ask in anonymos mode? (yes, no): ");
+            answer = readTxt("Do you want to ask in anonymous mode? (yes, no): ");
         } while (answer != "yes" && answer != "no");
 
         if (answer == "yes")
-            isAnonymosQues = YES;
+            isAnonymousQues = YES;
         else
-            isAnonymosQues = NO;
+            isAnonymousQues = NO;
     }
 };
 
@@ -158,7 +156,7 @@ struct stAccount
     string password;
     string fullName;
     string email;
-    enAgreement allowsAnonymusQues;
+    enAgreement allowsAnonymousQues;
 
     stAccount()
     {
@@ -174,7 +172,7 @@ struct stAccount
         password = getPassword();
         fillFullName();
         fillEmail();
-        isAllowsAnonymusQues();
+        isAllowsAnonymousQues();
     }
 
     void genId()
@@ -253,18 +251,18 @@ struct stAccount
         return 1;
     }
 
-    void isAllowsAnonymusQues()
+    void isAllowsAnonymousQues()
     {
         string answer;
         do
         {
-            answer = readTxt("Do you allow anonymos qustions? (yes, no): ");
+            answer = readTxt("Do you allow anonymous qustions? (yes, no): ");
         } while (answer != "yes" && answer != "no");
 
         if (answer == "yes")
-            allowsAnonymusQues = YES;
+            allowsAnonymousQues = YES;
         else
-            allowsAnonymusQues = NO;
+            allowsAnonymousQues = NO;
     }
 };
 
@@ -277,7 +275,7 @@ void stDataBase::updateQueses()
     {
         out << value.quesOwnerId << "\n";
         out << value.quesId << "\n";
-        out << value.isAnonymosQues << "\n";
+        out << value.isAnonymousQues << "\n";
         out << value.ThreadParentQuesId << "\n";
         out << value.toWhomId << "\n";
         out << value.ques << "\n";
@@ -296,7 +294,7 @@ void stDataBase::updateUsers()
         out << a.password << "\n";
         out << a.fullName << "\n";
         out << a.email << "\n";
-        out << a.allowsAnonymusQues << "\n";
+        out << a.allowsAnonymousQues << "\n";
     }
 }
 
@@ -319,7 +317,7 @@ void stDataBase::loadQueses()
             break;
         if (!getline(in, temp))
             break;
-        ques.isAnonymosQues = static_cast<enAgreement>(stoi(temp));
+        ques.isAnonymousQues = static_cast<enAgreement>(stoi(temp));
         if (!getline(in, ques.ThreadParentQuesId))
             break;
         if (!getline(in, ques.toWhomId))
@@ -358,7 +356,7 @@ void stDataBase::loadUsers()
         string temp;
         if (!getline(in, temp))
             break;
-        a.allowsAnonymusQues = static_cast<enAgreement>(stoi(temp));
+        a.allowsAnonymousQues = static_cast<enAgreement>(stoi(temp));
 
         accounts.push_back(a);
     }
@@ -487,14 +485,14 @@ struct stMain
         ques.toWhomId = toWhomId;
         ques.quesOwnerId = currentId;
 
-        if (db.accounts[userInd].allowsAnonymusQues == NO)
+        if (db.accounts[userInd].allowsAnonymousQues == NO)
         {
-            cout << "\nNote: you can't send anonymos questions to this id.\n";
-            ques.isAnonymosQues = NO;
+            cout << "\nNote: you can't send anonymous questions to this id.\n";
+            ques.isAnonymousQues = NO;
         }
         else
         {
-            ques.isAnonymusQues();
+            ques.fillIsAnonymousQues();
         }
 
         do
@@ -532,7 +530,7 @@ struct stMain
             cout << "\tThread";
         cout << "\tQustion Id (" << ques.quesId << ")";
 
-        if (ques.isAnonymosQues == NO)
+        if (ques.isAnonymousQues == NO)
             cout << " from user Id(" << ques.quesOwnerId << ")";
 
         cout << "\tQuestion: " << ques.ques;
@@ -548,7 +546,7 @@ struct stMain
         cout << "\n\n";
         cout << "\tQustion Id (" << ques.quesId << ")";
 
-        if (ques.isAnonymosQues == NO)
+        if (ques.isAnonymousQues == NO)
             cout << " !AQ ";
 
         cout << " to user id (" << ques.toWhomId << ")";
@@ -713,7 +711,7 @@ struct stMain
                 if (db.queses[_id].ThreadParentQuesId != "")
                     cout << "Thread parent question id (" << db.queses[_id].ThreadParentQuesId << ") ";
                 cout << "Question id (" << db.queses[_id].quesId << ") ";
-                if (!db.queses[_id].isAnonymosQues)
+                if (!db.queses[_id].isAnonymousQues)
                     cout << "from user id (" << db.queses[_id].quesOwnerId << ") ";
                 cout << "to user id (" << db.queses[_id].toWhomId << ")";
                 cout << "\t" << db.queses[_id].ques;
